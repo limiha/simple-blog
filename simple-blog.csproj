@@ -8,13 +8,9 @@
 
   <ItemGroup>
     <Compile Remove="blogpostfiles\**" />
-    <Compile Remove="wwwroot\Posts\**" />
     <Content Remove="blogpostfiles\**" />
-    <Content Remove="wwwroot\Posts\**" />
     <EmbeddedResource Remove="blogpostfiles\**" />
-    <EmbeddedResource Remove="wwwroot\Posts\**" />
     <None Remove="blogpostfiles\**" />
-    <None Remove="wwwroot\Posts\**" />
   </ItemGroup>
 
   <ItemGroup>
