@@ -1,0 +1,80 @@
+﻿@model Post
+@inject IOptionsSnapshot<BlogSettings> settings
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["Description"] = Model.Excerpt;
+    ViewData["RecentCount"] = 6;
+    bool showFullPost = ViewContext.RouteData.Values.ContainsKey("slug");
+    string host = Context.Request.Scheme + "://" + Context.Request.Host;
+}
+
+@section Head {
+    <link rel="canonical" href="@(host + Model.GetLink())" />
+    <meta property="twitter:image" content="@Model.PostImage" />
+}
+
+<article class="post container" itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+    <header>
+        <h1 itemprop="name headline"><a href="@Model.GetLink()" rel="canonical" itemprop="url">@Model.Title</a></h1>
+        <time datetime="@Model.PubDate.ToString("s")" itemprop="datePublished">@Model.PubDate.ToString("dd MMMM yyyy")</time> |
+        <a id="commentCount" href="@(host + Model.GetLink())#disqus_thread" data-disqus-identifier="@Model.ID">Comments</a>
+        @if (Model.Categories.Any())
+        {
+            <ul class="categories">
+                <li> | Posted in </li>
+                @foreach (string cat in Model.Categories)
+                {
+                    <li itemprop="articleSection"><a asp-controller="Blog" asp-action="Category" asp-route-category="@cat.ToLowerInvariant()">@cat</a></li>
+                }
+            </ul>
+        }
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Blog" asp-action="Edit" asp-route-id="@Model.ID" class="widget-social-admin" title="Edit this Post" aria-label="Edit this Post"><i class="fa fa-edit"></i></a>
+        }
+    </header>
+
+    <div itemprop="articleBody mainEntityOfPage" cdnify>
+        @Html.Raw(Model.RenderContent())
+    </div>
+    <footer>
+        <a id="commentCount" href="@(host + Model.GetLink())#disqus_thread" data-disqus-identifier="@Model.ID">Comments</a>
+        @if (Model.Categories.Any())
+        {
+            <ul class="categories">
+                <li> | Posted in </li>
+                @foreach (string cat in Model.Categories)
+                {
+                    <li itemprop="articleSection"><a asp-controller="Blog" asp-action="Category" asp-route-category="@cat.ToLowerInvariant()">@cat</a></li>
+                }
+            </ul>
+        }
+        <meta itemprop="author" content="@settings.Value.Owner" />
+        <meta itemprop="dateModified" content="@Model.LastModified.ToString("s")" />
+        <meta itemprop="mainEntityOfPage" content="@(host + Model.GetLink())" />
+    </footer>
+    @if (showFullPost)
+    {
+        ViewData["PostId"] = Model.ID;
+
+        <p>Please enjoy some of these other recent posts...</p>
+        <partial name="_RecentPosts" view-data="ViewData" />
+    }
+    <partial name="_AboutBox" />
+    </article>
+
+@if (showFullPost)
+{
+    <link rel="stylesheet" href="~/css/comments.scss" />
+    await Html.RenderPartialAsync("_SocialSharing", Model.Title);
+
+    //await Html.RenderPartialAsync("DisqusComments");
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    @section Scripts {
+        <script src="~/js/admin.js" async defer></script>
+        <link rel="stylesheet" href="~/css/admin.scss" />
+    }
+}

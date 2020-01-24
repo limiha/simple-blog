@@ -1,0 +1,17 @@
+﻿@model List<WilderMinds.MetaWeblog.CategoryInfo>
+@{
+    string host = Context.Request.Scheme + "://" + Context.Request.Host;
+}
+<article class="post container" itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+    <header>
+        <h1 itemprop="name headline">Browse posts by category...</h1>
+
+        <ul class="categories categorylist">
+            @foreach (var cat in Model)
+            {
+                <li itemprop="articleSection"><a asp-controller="Blog" asp-action="Category" asp-route-category="@cat.title">@cat.title</a></li>
+            }
+        </ul>
+    </header>
+    <partial name="_AboutBox" />
+</article>

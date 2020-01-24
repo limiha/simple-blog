@@ -1,0 +1,20 @@
+{
+  "name": "Your Site Name",
+  "short_name": "Your SIte Name",
+  "theme_color": "cornflowerblue",
+  "background_color": "cornflowerblue",
+  "display": "standalone",
+  "description": "An amazing site",
+  "scope": "/",
+  "start_url": "/?utm_source=pwa",
+  "icons": [
+    {
+      "src": "/img/icon192x192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/icon512x512.png",
+      "sizes": "512x512"
+    }
+  ]
+}

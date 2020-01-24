@@ -1,0 +1,140 @@
+﻿@inject IOptionsSnapshot<BlogSettings> settings
+@{
+    var host = Context.Request.Scheme + "://" + Context.Request.Host;
+}
+@functions {
+    private string IsActive(string routeKey)
+    {
+        return ViewContext.RouteData.Values.Values.Contains(routeKey) ? "active":string.Empty;
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns#">
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1" />
+    <meta name="description" content="@ViewData["Description"]" />
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" />
+    <script type="text/javascript" src="~/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/js/popper.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="~/css/abovethefold.scss" inline />
+    <link rel="stylesheet" href="~/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="~/css/brands.min.css" />
+    <link rel="stylesheet" href="~/css/solid.min.css" />
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Blog Search">
+    @RenderSection("Head", required: false)
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="@ViewData["Title"]" />
+    <meta property="og:description" content="@ViewData["Description"]" />
+    <meta property="og:url" content="@(host + Context.Request.Path)" />
+    <meta property="og:image" content="@host/img/twitter-summary-large.png" />
+    <meta property="twitter:site" content="@Html.Raw("@yourtwittername")" />
+    <meta property="twitter:creator" content="@Html.Raw("@yourtwittername")" />
+    <meta property="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/icon16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="~/img/icon180x180.png" />
+    <link rel="shortcut icon" href="/img/icon16x16.png" />
+
+    <meta name="msapplication-square150x150logo" content="/img/icon180x180.png" />
+    <link rel="edituri" type="application/rsd+xml" title="RSD" href="~/rsd.xml" />
+    <link rel="alternate" type="application/rss+xml" href="~/feed/rss/" />
+    <link rel="alternate" type="application/atom+xml" href="~/feed/atom/" />
+    <link rel="stylesheet" type="text/css" href="~/css/cookieconsent.min.css" />
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+    <header class="siteheader sticky-top">
+        <div class="d-flex">
+            <a href="~/">@settings.Value.Name</a>
+            <nav class="navbar navbar-expand-sm navbar-dark ml-auto">
+                <button class="navbar-toggler" type="button" data-target="#navbarSupportedContent" data-toggle="collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        @{
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item"><a title="Edit this Post" aria-label="Edit this Post" asp-controller="Blog" asp-action="Edit" class="nav-link"><i class="fa fa-edit"></i></a></li>
+                            }
+                        }
+                        <li class="nav-item @IsActive("Index")">
+                            <a href="~/" class="nav-link">Home </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Browse By </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" style="color:#000;font-size:1rem" href="/blog/categories">Categories</a>
+                            </div>
+                        </li>
+                        <li class="nav-item @IsActive("Contact")">
+                            <a href="~/contact" class="nav-link">Contact </a>
+                        </li>
+                        <li class="nav-item @IsActive("Search")">
+                            <a href="~/search" class="nav-link" title="Search" aria-label="Search"><i class="fa fa-search"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a target="_blank" rel="noopener" href="https://twitter.com/yourtwittername" class="nav-link" title="Follow me on Twitter" aria-label="Follow me on Twitter"><i class="fab fa-twitter"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main itemprop="mainEntity" itemscope itemtype="http://schema.org/Blog">
+        <noscript>
+            <p class="container">Some features of this website do not work as expected when JavaScript is disabled</p>
+        </noscript>
+        @RenderBody()
+    </main>
+
+    <footer class="sitefooter">
+        <div class="container">
+            <div class="d-flex">
+                <p class="blog-copyright">The content on this site is my own opinion, nobody else.  Period.</p>
+                <div class="widget-social ml-auto">
+                    <ul>
+                        <li>
+                            <a class="widget-social-tw" target="_blank" rel="noopener" href="https://twitter.com/yourtwittername" aria-label="Follow me on Twitter" title="Follow me on Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="widget-social-linkedin" target="_blank" rel="noopener" href="https://linkedin/in/yourname" aria-label="View my profile on LinkedIn" title="View my profile on LinkedIn">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="widget-social-rss" target="_blank" rel="noopener" href="/feed/rss" aria-label="Subscribe to my RSS Feed" title="Subscribe to my RSS Feed">
+                                <i class="fa fa-rss"></i>
+                            </a>
+                        </li>
+                        @{
+                            string path = Context.Request.Path;
+
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a asp-controller="Blog" asp-action="Edit" class="widget-social-admin" title="Edit this Post" aria-label="Edit this Post"><i class="fa fa-edit"></i></a></li>
+                                <li><a class="widget-social-admin" href="/logout/" title="Logout" aria-label="Logout"><i class="fa fa-lock"></i></a></li>
+                            }
+                            else
+                            {
+                                <li><a title="Login/Logout" aria-label="Login/Logout" class="widget-social-admin" href="~/login/?returnUrl=@path"><i class="fa fa-lock-open"></i></a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <link rel="stylesheet" href="~/css/belowthefold.scss" />
+    @RenderSection("Scripts", required: false)
+    <partial name="_EndScripts" />
+    @RenderSection("EndScripts", required: false)
+</body>
+</html>

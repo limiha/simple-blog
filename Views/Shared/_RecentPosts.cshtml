@@ -1,0 +1,15 @@
+﻿@inject IBlogService blogService
+@{
+    string host = Context.Request.Scheme + "://" + Context.Request.Host;
+    int numPosts = 10;
+    if (ViewData["RecentCount"] != null) numPosts = (int)ViewData["RecentCount"];
+}
+<ul>
+    @foreach (var item in await blogService.GetPosts(numPosts))
+    {
+        if (item.ID != ViewData["PostId"].ToString())
+        {
+            <li><a href="@(host + item.GetLink())">@item.Title</a></li>
+        }
+    }
+</ul>

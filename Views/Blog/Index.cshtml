@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Post>
+@inject IOptionsSnapshot<BlogSettings> settings
+@{
+    int currentPage = int.Parse(ViewContext.RouteData.Values["page"] as string ?? "0");
+}
+
+@foreach (var post in Model)
+{
+    await Html.RenderPartialAsync("Post.cshtml", post);
+}
+
+    <nav class="pagination" aria-label="Pagination">
+        <div class="container">
+            <div class="d-flex">
+                @if (Model.Any())
+                {
+                    <a rel="prev" href="@ViewData["prev"]" title="Older posts"><i class="fa fa-arrow-circle-left"></i> Older Posts</a>
+                }
+                @if (currentPage > 0)
+                {
+                    <a rel="next" href="@ViewData["next"]" title="Newer posts" class="ml-auto">Newer Posts  <i class="fa fa-arrow-alt-circle-right"></i></a>
+                }
+                <br /><br />
+            </div>
+        </div>
+        @section Head {
+            @if (Model.Any())
+            {
+                <link rel="prev" href="@ViewData["prev"]" />
+            }
+            @if (currentPage > 0)
+            {
+                <link rel="next" href="@ViewData["next"]" />
+            }
+            <link id="wlwmanifest" rel="wlwmanifest" type="application/wlwmanifest+xml" href="~/wlwmanifest.xml"/>
+        }
+
+        @section Scripts {
+            <script id="dsq-count-scr" src="//YOURDISCUSS.disqus.com/count.js" async></script>
+        }
+    </nav>
+
+@{await Html.RenderPartialAsync("_SocialSharing", ViewData["Title"]);}

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Your Site Name Search</ShortName>
+  <Description>Search this Blog</Description>
+  <Url type="text/html" method="get" template="https://yoururl.com/search?q={searchTerms}"/>
+  <Image width="16" height="16">https://yoururl.com/favicon.ico</Image>
+  <InputEncoding>UTF-8</InputEncoding>
+  <SearchForm>https://yoururl.com/search</SearchForm>
+</OpenSearchDescription>

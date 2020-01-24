@@ -1,0 +1,9 @@
+﻿@inject IBlogService blogService
+@{
+    string host = Context.Request.Scheme + "://" + Context.Request.Host;
+    var prevNext = await ((FileBlogService)blogService).GetPrevNext(ViewData["ID"].ToString());
+}
+    <ul>
+        <li>Next: <a href="@(host + prevNext.Next.GetLink())">@prevNext.Next.Title</a></li>
+        <li>Previous: <a href="@(host + prevNext.Previous.GetLink())">@prevNext.Previous.Title</a></li>
+    </ul>
