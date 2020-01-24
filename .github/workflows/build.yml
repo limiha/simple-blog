@@ -1,0 +1,34 @@
+name: "Build"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    if: github.event_name == 'push' && contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
+    name: Build Package
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+
+    - name: Restore
+      run: dotnet restore simple-blog
+
+    - name: Build
+      run: dotnet build simple-blog --configuration Release --no-restore
+
+    - name: Publish artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: webapp
+        path: bin/Release/netcoreapp3.1/publish/
