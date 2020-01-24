@@ -27,6 +27,9 @@ jobs:
     - name: Build
       run: dotnet build simple-blog.csproj --configuration Release --no-restore
 
+    - name: Publish
+      run: dotnet publish simple-blog.csproj --configuration Release
+
     - name: Publish artifact
       uses: actions/upload-artifact@master
       with:
