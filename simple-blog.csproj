@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>SimpleBlog</RootNamespace>
     <UserSecretsId>8e40dbc2-edff-4892-8b97-81c3133e1163</UserSecretsId>
   </PropertyGroup>
