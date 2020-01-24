@@ -22,10 +22,10 @@ jobs:
         dotnet-version: 3.1.100
 
     - name: Restore
-      run: dotnet restore simple-blog
+      run: dotnet restore simple-blog.csproj
 
     - name: Build
-      run: dotnet build simple-blog --configuration Release --no-restore
+      run: dotnet build simple-blog.csproj --configuration Release --no-restore
 
     - name: Publish artifact
       uses: actions/upload-artifact@master
